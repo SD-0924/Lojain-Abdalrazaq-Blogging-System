@@ -1,6 +1,6 @@
 import express from 'express';
 import { logger } from './middlewares/loggerMiddleware';
-import userRoutes from './routes/userRoutes';
+//import userRoutes from './routes/userRoutes';
 /*import sequelize from './config/database';
 import './models/SyncDB';*/
 
@@ -13,7 +13,7 @@ app.use(logger);
 app.use(express.json());
 
 // Routes
-app.use('/api/users', userRoutes);
+//app.use('/api/users', userRoutes);
 
 // starting the server
 app.listen(PORT, () => {
