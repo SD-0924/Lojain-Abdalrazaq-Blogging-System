@@ -69,9 +69,43 @@ const getPostById = async(req: Request, res: Response) => {
     }
 };
 
+// update post by id endpoint
+const updatePost = async(req: Request, res: Response) =>{
+    try{
+
+        // validate the input data in the request body and the post id
+        const { error: postID } = postValidator.validatePostID(req.params);
+        const { error: updatePost } = postValidator.validateUpdatePost(req.body);
+
+        if(postID){
+            return handleError(req, res, postID.details[0].message, 422);
+        }
+
+        if(updatePost){
+            return handleError(req, res, updatePost.details[0].message, 422);
+        }
+
+        // parsing the post id to a number
+        const postId = Number(req.params.id);
+
+        // call the service to update the post
+        const post = await postService.updatePost(postId, req.body);
+
+        if(!post){
+            return handleError(req, res, 'Post or User not found.', 404);
+        }
+
+        return res.status(200).json({ success: true, data: post });
+
+    }catch(err){
+        return handleError(req, res, 'Error in updating post.', 500);
+    }
+}
+
 // export the createPost function
 export { 
     createPost,
     getPosts,
-    getPostById
+    getPostById,
+    updatePost
 };
