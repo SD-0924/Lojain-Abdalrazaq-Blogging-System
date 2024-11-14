@@ -102,10 +102,38 @@ const updatePost = async(req: Request, res: Response) =>{
     }
 }
 
+// delete post by id endpoint
+const deletePost = async(req: Request, res: Response) =>{
+    try{
+
+        // validate the input data
+        const { error } = postValidator.validatePostID(req.params);
+        if(error){
+            return handleError(req, res, error.details[0].message, 422);
+        }
+
+        // parsing the post id to a number
+        const postId = Number(req.params.id);
+
+        // call the service to delete the post
+        const post = await postService.deletePost(postId);
+
+        if(!post){
+            return handleError(req, res, 'Post not found.', 404);
+        }
+
+        return res.status(200).json({ success: true, message: `Post with id number: ${postId} has been deleted successfully.` });
+
+    }catch(err){
+        return handleError(req, res, 'Error in deleting post.', 500);
+    }
+}
+
 // export the createPost function
 export { 
     createPost,
     getPosts,
     getPostById,
-    updatePost
+    updatePost,
+    deletePost
 };

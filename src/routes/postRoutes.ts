@@ -19,4 +19,8 @@ router.put('/:id', async (req: Request, res: Response) => {
     await postController.updatePost(req, res)
 })
 
+router.delete('/:id', async (req: Request, res: Response) => {
+    await postController.deletePost(req, res)
+})
+
 export default router;
