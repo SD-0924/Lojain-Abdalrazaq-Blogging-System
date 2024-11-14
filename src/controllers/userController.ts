@@ -23,7 +23,7 @@ const createUser = async(req: Request, res: Response) => {
         // call the serivce to make sure that the user does not exist
         const user = await UserService.createUser(req.body);
         return res.status(201).json({ success: true, user });
-        
+
     } catch (err) {
         return handleError(req, res, 'Error in creating user', 500);
     }

@@ -1,5 +1,6 @@
 import { DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database';
+import bcrypt from 'bcryptjs';
 
 // interface for User attributes
 interface UserAttributes {
@@ -55,4 +56,12 @@ User.init(
     }
 );
 
+// adding Hooks to the User Mosel to hash the password before creating a new user
+User.addHook('beforeCreate', async (user: User) => {
+    if (user.password) {
+    // generate a salt which is a random data that is added to a password before it is hashed
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+    }
+});
 export default User;
