@@ -7,7 +7,7 @@ class PostService{
     async createPost(postData: any){
 
         // first, i checked the user exists or not by calling getUserById method from UserService
-        const userExists = await UserService.getUserById(postData.userId);
+        const userExists = await UserService.getUserById(postData.userID);
         if(!userExists){
             return null;
         }

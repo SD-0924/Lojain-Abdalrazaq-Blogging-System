@@ -4,7 +4,7 @@ import Joi from 'joi';
 const postValidationSchema = Joi.object({
     title: Joi.string().min(3).max(50).required(),
     content: Joi.string().min(6).required(),
-    userId: Joi.number().integer().positive().required(),
+    userID: Joi.number().integer().positive().required(),
 });
 
 
