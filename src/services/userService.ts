@@ -21,7 +21,15 @@ class UserService{
     async deleteUser(userId: number) {
         return await UserRepository.delete(userId);
     }
+
+    // adding the methods to find a user by email or username
+    async getUserByEmail(email: string){
+        return await UserRepository.findByEmail(email);
+    }
     
+    async getUserByUserName(userName: string){
+        return await UserRepository.findByUserName(userName);
+    }
 }
 
 export default new UserService();
