@@ -16,7 +16,7 @@ const createPost = async(req: Request, res: Response) => {
         // call the service to create a post
         const post = await postService.createPost(req.body);
         if(!post){
-            return handleError(req, res, `The user with id ${req.body.id} is not exists` , 500);
+            return handleError(req, res, `User with id ${req.body.userId} does not exist`, 404);
         }
 
         // return the response with the created post
