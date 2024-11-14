@@ -35,16 +35,16 @@ User.init(
         userName: { // user name
             type: DataTypes.STRING,  
             allowNull: false,  
-            unique: true,  
+            unique: true,   // the user name should be unique
         },
         password: { // password
             type: DataTypes.STRING,  
-            allowNull: false,  // Cannot be null
+            allowNull: false, 
         },
         email: { // email
-            type: DataTypes.STRING,  // String data type
-            allowNull: false,  // Cannot be null
-            unique: true,  // Ensures unique values for emails
+            type: DataTypes.STRING, 
+            allowNull: false, 
+            unique: true,  // the email should be unique
         },
     },
     {

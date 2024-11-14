@@ -9,7 +9,9 @@ const createUser = async(req: Request, res: Response) => {
         // validate input data
         const { error } = validateCreateUser(req.body);
         if (error) {
-            return handleError(req, res, error.details[0].message, 400); // Return validation errors
+            // if there is an error while validating the input data, return an error response
+            // exmaple: "email is required", "password must be minimum of 6 characters"
+            return handleError(req, res, error.details[0].message, 400);
         }
         // call service to create user
         const user = await UserService.createUser(req.body);

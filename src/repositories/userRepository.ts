@@ -1,3 +1,4 @@
+import e from 'express';
 import User from '../models/User';
 
 // repository layer will handle direct database interactions for User CRUD operations.
@@ -30,7 +31,16 @@ class UserRepository {
         }
         return null;
     }
+
+    // Now, in addition to the CRUD operations,
+    // we will add methods to find a user by email or username in order to authenticate a user
+    async findByEmail(email: string) {
+        return await User.findOne({ where: { email } });
+    }
     
+    async findByUserName(userName: string){
+        return await User.findOne({ where: { userName } });
+    }
 }
 
 // here we are returning an instance of the class - Singleton pattern
