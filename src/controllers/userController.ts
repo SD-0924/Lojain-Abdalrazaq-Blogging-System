@@ -69,12 +69,32 @@ const getUserById = async(req: Request, res: Response) =>{
     }
 }
 
+// delete a user by id endpoint
+const deleteUserById = async(req: Request, res: Response) =>{
+    try{
+        // validate the input param
+        const { error } = validateUserId(req.params);
+        if(error){
+            return handleError(req, res, error.details[0].message, 422);
+        }
+        // convert the id to a number
+        const userNumber = parseInt(req.params.id);
+        const user = await UserService.deleteUser(userNumber);
 
+        if(!user){
+            return handleError(req, res, `There is no user with id number: ${userNumber}, the Delete operation failed.`, 404);
+        }
 
+        return res.status(200).json({ success: true, message: `User with id number: ${userNumber} has been deleted successfully.` });
 
+    }catch(err){
+        return handleError(req, res, `Error in deleting user by id ${req.params}`, 500);
+    }
+}
 
 export{ 
         createUser, 
         getAllUsers,
-        getUserById
+        getUserById,
+        deleteUserById
     };
