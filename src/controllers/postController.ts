@@ -48,8 +48,15 @@ const getPosts = async(req: Request, res: Response) => {
 // get post by id endpoint
 const getPostById = async(req: Request, res: Response) => {
     try{
+        // validate the input data
+        const { error } = postValidator.validatePostID(req.params);
+        if(error){
+            return handleError(req, res, error.details[0].message, 422);
+        }
+        const postId = Number(req.params.id);
+
         // call the service to get post by id
-        const post = await postService.getPostById(Number(req.params.id));
+        const post = await postService.getPostById(Number(postId));
         if(!post){
             return handleError(req, res, 'Post not found.', 404);
         }

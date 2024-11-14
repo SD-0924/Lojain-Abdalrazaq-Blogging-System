@@ -7,17 +7,20 @@ const postValidationSchema = Joi.object({
     userID: Joi.number().integer().positive().required(),
 });
 
-
-
-
-
+const postID = Joi.object({
+    id: Joi.number().integer().positive().required(),
+});
 
 // * Functions Implementation * //
 const validateCreatePost = (postData: any) => {
     return postValidationSchema.validate(postData);
 };
 
+const validatePostID = (postId: any) => {
+    return postID.validate(postId);
+}
 
 export{
-    validateCreatePost
+    validateCreatePost,
+    validatePostID
 }

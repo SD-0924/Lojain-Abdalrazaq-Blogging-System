@@ -11,4 +11,8 @@ router.get('/', async (req: Request, res: Response) => {
     await postController.getPosts(req, res)
 })
 
+router.get('/:id', async (req: Request, res: Response) => {
+    await postController.getPostById(req, res)
+})
+
 export default router;
