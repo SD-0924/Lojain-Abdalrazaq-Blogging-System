@@ -9,7 +9,10 @@ class UserRepository {
     }
 
     async findAll() {
-        return await User.findAll();
+        return await User.findAll({
+            // here, i am specifying the attributes that i want to return
+        attributes: ['userID', 'userName', 'email'] 
+    });
     }
 
     async findById(id: number) {

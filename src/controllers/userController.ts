@@ -22,13 +22,32 @@ const createUser = async(req: Request, res: Response) => {
 
         // call the serivce to make sure that the user does not exist
         const user = await UserService.createUser(req.body);
-        return res.status(201).json({ success: true, user });
+        return res.status(201).json({ success: true, message: "User Created successfully and stored in the Database." });
 
     } catch (err) {
         return handleError(req, res, 'Error in creating user', 500);
     }
 };
 
-// delete a user endpoint
+// get all users endpoint
+const getAllUsers = async(req: Request, res: Response) =>{
+    try{
+        // i want only to return the user name and email
+        const users = await UserService.getAllUsers();
 
-export { createUser };
+        // in case we dont have users in the database
+        if(users.length === 0){
+            return handleError(req, res, 'No users found in the Database.', 404);
+        }
+
+        return res.status(200).json({ success: true, data: users });
+
+    }catch(err){
+        return handleError(req, res, 'Error in getting all users.', 500);
+    }
+}
+
+export{ 
+        createUser, 
+        getAllUsers 
+    };
