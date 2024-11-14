@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { handleError } from '../utils/errorHandler'; 
-import postService from 'services/postService';
-import * as postValidator from 'validations/postValidation';
+import postService from '../services/postService';
+import * as postValidator from '../validations/postValidation';
 
 // create a new post endpoint
 const createPost = async(req: Request, res: Response) => {
@@ -29,6 +29,6 @@ const createPost = async(req: Request, res: Response) => {
 };
 
 // export the createPost function
-export{ 
+export { 
     createPost 
 };
