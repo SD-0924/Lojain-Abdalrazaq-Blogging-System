@@ -28,6 +28,7 @@ const createPost = async(req: Request, res: Response) => {
 
 };
 
+// get all posts endpoint
 const getPosts = async(req: Request, res: Response) => {
     try{
         // call the service to get all posts
@@ -44,8 +45,26 @@ const getPosts = async(req: Request, res: Response) => {
     }
 };
 
+// get post by id endpoint
+const getPostById = async(req: Request, res: Response) => {
+    try{
+        // call the service to get post by id
+        const post = await postService.getPostById(Number(req.params.id));
+        if(!post){
+            return handleError(req, res, 'Post not found.', 404);
+        }
+
+        // return the response with the post
+        return res.status(200).json({ success: true, data: post });
+
+    }catch(err){
+        return handleError(req, res, 'Error in getting post.', 500);
+    }
+};
+
 // export the createPost function
 export { 
     createPost,
-    getPosts
+    getPosts,
+    getPostById
 };
