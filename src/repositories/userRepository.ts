@@ -1,4 +1,3 @@
-import e from 'express';
 import User from '../models/User';
 
 // repository layer will handle direct database interactions for User CRUD operations.
