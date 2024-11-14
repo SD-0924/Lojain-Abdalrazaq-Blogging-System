@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { handleError } from '../utils/errorHandler'; 
 import UserService from '../services/userService';  
-import { validateCreateUser } from '../validations/userValidation';
+import { validateCreateUser, validateUserId } from '../validations/userValidation';
 
 // create a new user endpoint
 const createUser = async(req: Request, res: Response) => {
@@ -47,7 +47,34 @@ const getAllUsers = async(req: Request, res: Response) =>{
     }
 }
 
+// get a user by id endpoint
+const getUserById = async(req: Request, res: Response) =>{
+    try{
+        const { error } = validateUserId(req.params);
+        if(error){
+            return handleError(req, res, error.details[0].message, 422);
+        }
+
+        const userNumber = parseInt(req.params.id);
+        const user = await UserService.getUserById(userNumber);
+
+        if (!user) {
+            return handleError(req, res, `There is no user with id number: ${userNumber}`, 404);
+        }
+
+        return res.status(200).json({ success: true, data: user });
+
+    }catch(err){
+        return handleError(req, res, 'Error in getting user by id.', 500);
+    }
+}
+
+
+
+
+
 export{ 
         createUser, 
-        getAllUsers 
+        getAllUsers,
+        getUserById
     };

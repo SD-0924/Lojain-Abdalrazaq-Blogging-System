@@ -6,9 +6,23 @@ const userValidationSchema = Joi.object({
     email: Joi.string().email().required(),
     password: Joi.string().min(6).required(),
 });
-// function checks if the input matches the schema for creating a user or updating a user
+
+// defining a schema for the `id` parameter
+const userIdSchema = Joi.object({
+    id: Joi.number().integer().positive().required(),
+});
+
+// function checks if the input matches the schema for creating a user record
 const validateCreateUser = (userData: any) => {
     return userValidationSchema.validate(userData);
 };
 
-export { validateCreateUser };
+// function checks if the input matches the schema for the `id` parameter
+const validateUserId = (userId: any) => {
+    return userIdSchema.validate(userId);
+}
+
+export { 
+        validateCreateUser,
+        validateUserId
+    };

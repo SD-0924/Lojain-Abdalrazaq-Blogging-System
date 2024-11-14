@@ -16,7 +16,10 @@ class UserRepository {
     }
 
     async findById(id: number) {
-        return await User.findByPk(id);
+        return await User.findByPk(id,{
+            // here, i am specifying the attributes that i want to return
+            attributes: ['userID', 'userName', 'email']
+        });
     }
 
     async update(userId: number, updateData: any) {
