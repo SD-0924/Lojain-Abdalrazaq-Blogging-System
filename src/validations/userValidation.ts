@@ -12,6 +12,12 @@ const userIdSchema = Joi.object({
     id: Joi.number().integer().positive().required(),
 });
 
+const userUpdateSchema = Joi.object({
+    userName: Joi.string().min(3).max(50).optional(),
+    email: Joi.string().email().optional(),
+    password: Joi.string().min(6).optional(),
+}).or('userName', 'email', 'password');
+
 // function checks if the input matches the schema for creating a user record
 const validateCreateUser = (userData: any) => {
     return userValidationSchema.validate(userData);
@@ -22,7 +28,13 @@ const validateUserId = (userId: any) => {
     return userIdSchema.validate(userId);
 }
 
-export { 
-        validateCreateUser,
-        validateUserId
-    };
+// function checks if the input matches the schema for updating a user record
+const validateUpdateUser = (userData: any) => {
+    return userUpdateSchema.validate(userData);
+}
+
+export{ 
+    validateCreateUser,
+    validateUserId,
+    validateUpdateUser
+};

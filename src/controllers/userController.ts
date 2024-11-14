@@ -1,13 +1,13 @@
 import { Request, Response } from 'express';
 import { handleError } from '../utils/errorHandler'; 
 import UserService from '../services/userService';  
-import { validateCreateUser, validateUserId } from '../validations/userValidation';
+import * as userValidator from '../validations/userValidation';
 
 // create a new user endpoint
 const createUser = async(req: Request, res: Response) => {
     try {
         // validate input data
-        const { error } = validateCreateUser(req.body);
+        const { error } = userValidator.validateCreateUser(req.body);
         if (error) {
             // if there is an error while validating the input data, return an error response
             // exmaple: "email is required", "password must be minimum of 6 characters"
@@ -50,7 +50,7 @@ const getAllUsers = async(req: Request, res: Response) =>{
 // get a user by id endpoint
 const getUserById = async(req: Request, res: Response) =>{
     try{
-        const { error } = validateUserId(req.params);
+        const { error } = userValidator.validateUserId(req.params);
         if(error){
             return handleError(req, res, error.details[0].message, 422);
         }
@@ -73,7 +73,7 @@ const getUserById = async(req: Request, res: Response) =>{
 const deleteUserById = async(req: Request, res: Response) =>{
     try{
         // validate the input param
-        const { error } = validateUserId(req.params);
+        const { error } = userValidator.validateUserId(req.params);
         if(error){
             return handleError(req, res, error.details[0].message, 422);
         }
@@ -92,9 +92,40 @@ const deleteUserById = async(req: Request, res: Response) =>{
     }
 }
 
+// update user by id endpoint
+const updateUserById = async(req: Request, res: Response) =>{
+    try{
+        // validate the input param
+        const { error: idError } = userValidator.validateUserId(req.params);
+        const { error: updateError } = userValidator.validateUpdateUser(req.body);
+
+        if(idError){
+            return handleError(req, res, idError.details[0].message, 422);
+        }
+
+        if(updateError){
+            return handleError(req, res, updateError.details[0].message, 422);
+        }
+
+        // parsing the id to a number
+        const userNumber = parseInt(req.params.id);
+        // call the service to update the user
+        const updatedUser = await UserService.updateUser(userNumber, req.body);
+
+        if(!updatedUser){
+            return handleError(req, res, `There is no user with id number: ${userNumber}, the Update operation failed.`, 404);
+        }
+        return res.status(200).json({ success: true, message: `User with id number: ${userNumber} has been updated successfully.` });
+
+    }catch(err){
+        return handleError(req, res, 'Error in updating user by id.', 500);
+    }
+}
+
 export{ 
-        createUser, 
-        getAllUsers,
-        getUserById,
-        deleteUserById
-    };
+    createUser, 
+    getAllUsers,
+    getUserById,
+    deleteUserById,
+    updateUserById
+};

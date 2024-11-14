@@ -19,4 +19,8 @@ router.delete('/:id', async (req: Request, res: Response) => {
     await userController.deleteUserById(req, res);
 })
 
+router.put('/:id', async (req: Request, res: Response) => {
+    await userController.updateUserById(req, res);
+})
+
 export default router;
