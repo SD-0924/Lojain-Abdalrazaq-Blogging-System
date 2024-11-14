@@ -28,7 +28,24 @@ const createPost = async(req: Request, res: Response) => {
 
 };
 
+const getPosts = async(req: Request, res: Response) => {
+    try{
+        // call the service to get all posts
+        const posts = await postService.getAllPosts();
+        if(!posts){
+            return handleError(req, res, 'No posts found in the Database.', 404);
+        }
+
+        // return the response with the posts
+        return res.status(200).json({ success: true, data: posts });
+
+    }catch(err){
+        return handleError(req, res, 'Error in getting posts.', 500);
+    }
+};
+
 // export the createPost function
 export { 
-    createPost 
+    createPost,
+    getPosts
 };
