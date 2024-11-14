@@ -27,3 +27,8 @@ const createPost = async(req: Request, res: Response) => {
     }
 
 };
+
+// export the createPost function
+export{ 
+    createPost 
+};
