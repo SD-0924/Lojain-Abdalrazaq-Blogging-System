@@ -22,14 +22,22 @@ class UserService{
         return await UserRepository.delete(userId);
     }
 
-    // adding the methods to find a user by email or username
-    async getUserByEmail(email: string){
-        return await UserRepository.findByEmail(email);
+    async findDuplicateUser(email: string, userName: string){
+
+        const findUserEmail = await UserRepository.findByEmail(email);
+        if(findUserEmail){
+            return "Email already exists";
+        }
+
+        const findUserName = await UserRepository.findByUserName(userName);
+        if (findUserName){
+            return "Username already exists";
+        }
+
+        // no duplicated user found
+        return null; 
     }
     
-    async getUserByUserName(userName: string){
-        return await UserRepository.findByUserName(userName);
-    }
 }
 
 export default new UserService();
