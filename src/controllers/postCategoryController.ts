@@ -32,6 +32,23 @@ const createCategoryPost = async(req: Request, res: Response) => {
     }
 };
 
+const getCategoriesPost = async(req: Request, res: Response) => {
+    try{
+        // implementation
+
+
+
+
+
+
+    }catch(err){
+        return handleError(req, res, 'Error in getting categories for post', 500);
+    }
+};
+
+
+
 export{
-    createCategoryPost
+    createCategoryPost,
+    getCategoriesPost
 }

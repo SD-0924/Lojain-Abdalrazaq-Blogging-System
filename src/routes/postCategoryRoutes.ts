@@ -7,4 +7,8 @@ router.post('/:postID/categories', async (req: Request, res: Response) => {
     await postCategoryController.createCategoryPost(req, res)
 })
 
+router.get('/:postID/categories', async (req: Request, res: Response) => {
+    await postCategoryController.getCategoriesPost(req, res)
+})
+
 export default router;
