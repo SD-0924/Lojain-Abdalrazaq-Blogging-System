@@ -50,6 +50,29 @@ class PostService{
         return enhancedPosts;
     }
 
+    // get post with its details
+    async getPostDetails(postId: number){
+
+        // check if the post exists or not
+        const post = await PostRepository.findById(postId);
+        if (!post) {
+            return null;
+        }
+
+        // fetch the user, categories, and comments associated with the post
+        const user = await UserService.getUserById(post.userID);
+        const categories = await PostCategoryService.getCategoriesPost(post.postID);
+        const comments = await commentService.getCommentsByPostId(post.postID);
+
+        // return the result as JSON object
+        return {
+            ...post.toJSON(), // Convert Sequelize instance to plain object
+            user, // Add user
+            categories, // Add categories
+            comments, // Add comments
+        };
+    }
+
     // read post by id
     async getPostById(postId: number){
         return await PostRepository.findById(postId);

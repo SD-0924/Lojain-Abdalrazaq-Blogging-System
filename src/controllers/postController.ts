@@ -56,9 +56,9 @@ const getPostById = async(req: Request, res: Response) => {
         const postId = Number(req.params.id);
 
         // call the service to get post by id
-        const post = await postService.getPostById(Number(postId));
+        const post = await postService.getPostDetails(Number(postId));
         if(!post){
-            return handleError(req, res, 'Post not found.', 404);
+            return handleError(req, res, `Post with ID ${postId} not found.`, 404);
         }
 
         // return the response with the post
