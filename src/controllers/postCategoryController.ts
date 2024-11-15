@@ -15,6 +15,7 @@ const createCategoryPost = async(req: Request, res: Response) => {
         if(postID){
             return handleError(req, res, postID.details[0].message, 422);
         }
+
         // calling the service to create category for post
         // it will check the post id, if it exists then it will create the category either it was exists or not
         const category = await postCategoryService.createCategoryForPost(Number(req.params.postID), req.body.name);
@@ -26,7 +27,7 @@ const createCategoryPost = async(req: Request, res: Response) => {
         // return the response with the created category
         return res.status(201).json({ success: true, data: category });
 
-    }catch(err){
+    }catch(err: any){
         return handleError(req, res, 'Error in creating category for post', 500);
     }
 };
