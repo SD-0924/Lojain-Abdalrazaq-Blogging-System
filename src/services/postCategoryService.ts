@@ -1,4 +1,4 @@
-import PostCategory from "../models/PostCategory";
+import PostCategoryRepository from "../repositories/postCategoryRepository";
 import PostRepository from '../repositories/postRepository';
 import CategoryRepository from '../repositories/categoryRepository';
 
@@ -10,17 +10,18 @@ class PostCategoryService{
         // check for the post existence by id
         const post = await PostRepository.findById(postID);
         if(!post){
-            return "Post not found";
+            return "Post not found to add category";
         }
         // check for the category existence by Name
         let category = await CategoryRepository.findByName(name);
         // if not found create new category
         if(!category){
+            console.log("Category not found, creating new category");
             category = await CategoryRepository.create({name});
         }
 
         // creating the post category
-        await PostCategory.create({
+        await PostCategoryRepository.create({
             postID: post.postID,
             categoryID: category.categoryID,
         });
