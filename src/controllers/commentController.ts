@@ -70,7 +70,6 @@ const getCommentsByPostId = async(req: Request, res: Response) =>{
     }
 };
 
-
 export{
     createComment,
     getCommentsByPostId
