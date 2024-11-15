@@ -3,6 +3,8 @@ import User from './User';
 import Post from './Post';
 import Comment from './Comment';
 import Category from './Category';
+import PostCategory from './PostCategory';
+
 
 /* create the associations */
 
@@ -20,15 +22,15 @@ Comment.belongsTo(Post, { foreignKey: 'postID' });
 
 // Post and Category modelss
 Category.belongsToMany(Post, {
-    through: 'PostCategories', 
-    foreignKey: 'categoryId',
-    otherKey: 'postId'
+    through: PostCategory, 
+    foreignKey: 'categoryID',
+    as: 'posts',
 });
 
 Post.belongsToMany(Category, {
-    through: 'PostCategories',
-    foreignKey: 'postId',
-    otherKey: 'categoryId'
+    through: PostCategory,
+    foreignKey: 'postID',
+    as: 'categories',
 });
 
 // test the connection to the database
@@ -50,4 +52,4 @@ const syncDB = async () => {
     }
 };
 
-//syncDB();  // Call the syncDB function to sync the tables
+syncDB();  // Call the syncDB function to sync the tables
