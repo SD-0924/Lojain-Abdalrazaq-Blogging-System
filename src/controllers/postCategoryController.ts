@@ -34,13 +34,17 @@ const createCategoryPost = async(req: Request, res: Response) => {
 
 const getCategoriesPost = async(req: Request, res: Response) => {
     try{
-        // implementation
+        
+        // validate the post id from the params
+        const { error } = postCategoryValidator.validatePostID(req.params);
+        if(error){
+            return handleError(req, res, error.details[0].message, 422);
+        }
+        // calling the service to get the categories for post
+        const categories = await postCategoryService.getCategoriesPost(Number(req.params.postID));
 
-
-
-
-
-
+        return res.status(200).json({ success: true, data: categories });
+        
     }catch(err){
         return handleError(req, res, 'Error in getting categories for post', 500);
     }
