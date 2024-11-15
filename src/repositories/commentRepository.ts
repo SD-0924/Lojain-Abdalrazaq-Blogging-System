@@ -29,6 +29,11 @@ class CommentRepository {
         }
         return null;
     }
+
+    // i want to add a new method to get all comments of a specific post
+    async getCommentsByPostId(postID: number) {
+        return  await Comment.findAll({ where: { postID } });   
+    }
     
 }
 
