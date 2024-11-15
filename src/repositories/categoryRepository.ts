@@ -16,6 +16,13 @@ class CategoryRepositroy{
     async findById(id: number){
         return await Category.findByPk(id);
     }
+
+    // get all categories
+    async findByIds(categoryIDs: number[]) {
+        return await Category.findAll({
+            where: { categoryID: categoryIDs },
+        });
+    }
     
 }
 

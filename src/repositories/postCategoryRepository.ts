@@ -7,6 +7,15 @@ class PostCategoryRepository{
         return await PostCategory.create(postCategoryData);
     }
 
+    // get all categories of a post
+    async findByPostId(postID: number){
+        return await PostCategory.findAll({
+            where: {
+                postID: postID
+            }
+        });
+    }
+
 }
 
 export default new PostCategoryRepository();

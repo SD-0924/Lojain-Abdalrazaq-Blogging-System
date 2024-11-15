@@ -31,6 +31,25 @@ class PostCategoryService{
             categoryID: category.categoryID,
         });
     }
+
+    // function to get all categories of a post
+    async getCategoriesPost(postID: number){
+
+        // query the post categories
+        const postCategories = await PostCategoryRepository.findByPostId(postID);
+
+        // check the returned data
+        if (!postCategories || postCategories.length === 0) {
+            return (`No categories found for post with ID ${postID}`);
+        }
+
+        // extracting the categories Id and fetching the categories
+        const categoryIDs = postCategories.map(pc => pc.categoryID);
+        // fetching the categories by ids from the Category service
+        const categories = await categoryService.getCategoriesByIds(categoryIDs);
+
+        return categories;
+    }
 }
 
 export default new PostCategoryService();

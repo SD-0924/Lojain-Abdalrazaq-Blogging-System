@@ -11,6 +11,10 @@ class CategoryService{
     async getCategoryByName(name: string){
         return await categoryRepository.findByName(name);
     }
+
+    async getCategoriesByIds(categoryIDs: number[]) {
+        return await categoryRepository.findByIds(categoryIDs);
+    }
 }
 
 export default new CategoryService();
