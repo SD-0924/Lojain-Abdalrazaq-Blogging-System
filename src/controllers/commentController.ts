@@ -18,7 +18,7 @@ const createComment = async(req: Request, res: Response) =>{
         }
 
         // parsing the post id to a number
-        const postId = Number(req.params.postId);
+        const postId = Number(req.params.postID);
 
         // comment data
         const commentData = {
@@ -51,13 +51,15 @@ const getCommentsByPostId = async(req: Request, res: Response) =>{
             return handleError(req, res, error.details[0].message, 422);
         }
         // parsing the post id to a number
-        const postId = Number(req.params.postId);
+        const postId = Number(req.params.postID);
 
         // calling the service to get all comments of a specific post
         const comments = await commentService.getCommentsByPostId(postId);
 
-        if(comments.length == 0){
-            return handleError(req, res, 'No comments found.', 404);
+        if(!comments){
+            return handleError(req, res, 'No post found with the given id.', 404);
+        }else if(comments.length == 0){
+            return handleError(req, res, 'No comments found for the given post.', 404);
         }
 
         // return the response with the comments

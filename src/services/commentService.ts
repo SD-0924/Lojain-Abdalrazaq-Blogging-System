@@ -1,6 +1,6 @@
-import commentRepository from "repositories/commentRepository";
-import userService from "services/userService";
-import postService from "services/postService";
+import commentRepository from "../repositories/commentRepository";
+import userService from "./userService";
+import postService from "./postService";
 
 class CommentService{
 
@@ -23,6 +23,10 @@ class CommentService{
 
     // get comment of specfic post
     async getCommentsByPostId(postId: number){
+        const postExists = await postService.getPostById(postId);
+        if(!postExists){
+            return null;
+        }
         return await commentRepository.getCommentsByPostId(postId);
     }
 }
