@@ -1,6 +1,7 @@
 import { Sequelize, DataTypes, Model, Optional } from 'sequelize';
 import sequelize from '../config/database'; 
-import User from './User';  // importing the User model
+import User from './User';  // import the User model
+import Category from './Category';
 
 // interface for Post attributes
 interface PostAttributes {

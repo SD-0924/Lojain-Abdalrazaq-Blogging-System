@@ -18,10 +18,18 @@ Comment.belongsTo(User, { foreignKey: 'userID' });
 Post.hasMany(Comment, { foreignKey: 'postID' });
 Comment.belongsTo(Post, { foreignKey: 'postID' });
 
-// Post and Category models
-Post.belongsToMany(Category, { through: 'PostCategory' });
-Category.belongsToMany(Post, { through: 'PostCategory' });
+// Post and Category modelss
+Category.belongsToMany(Post, {
+    through: 'PostCategories', 
+    foreignKey: 'categoryId',
+    otherKey: 'postId'
+});
 
+Post.belongsToMany(Category, {
+    through: 'PostCategories',
+    foreignKey: 'postId',
+    otherKey: 'categoryId'
+});
 
 // test the connection to the database
 sequelize.authenticate()
@@ -35,7 +43,7 @@ sequelize.authenticate()
 // sync the tables
 const syncDB = async () => {
     try {
-        await sequelize.sync({ force: false }); 
+        await sequelize.sync({ force: true }); 
         console.log('Database & tables created!');
     } catch (error) {
         console.error('Error syncing tables:', error);
