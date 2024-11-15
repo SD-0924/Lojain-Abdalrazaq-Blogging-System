@@ -1,5 +1,7 @@
 import PostRepository from '../repositories/postRepository';
 import UserService from './userService';
+import commentService from './commentService';
+import PostCategoryService from './postCategoryService';
 
 class PostService{
 
@@ -16,7 +18,36 @@ class PostService{
 
     // read all posts
     async getAllPosts(){
-        return await PostRepository.findAll();
+
+        // Get all posts with associated users, categories, and comments
+        // firstly, i want to get all the posts using the findAll method from PostRepository
+        const posts = await PostRepository.findAll();
+
+        if (posts.length === 0) {
+            return "There are no posts available in the Database";
+        }
+        // then, i want to get all the users using the getAllUsers method from UserService
+        const enhancedPosts = await Promise.all(
+            posts.map(async (post: any) => {
+                // the user 
+                const user = await UserService.getUserById(post.userID);
+                // the categories
+                const categories = await PostCategoryService.getCategoriesPost(post.postID);
+                // the comments
+                const comments = await commentService.getCommentsByPostId(post.postID);
+
+                // json response
+                return{
+                     ...post.toJSON(), // Convert Sequelize instance to plain object
+                    user,
+                    categories,
+                    comments,
+                };
+            })
+            
+        );
+
+        return enhancedPosts;
     }
 
     // read post by id
