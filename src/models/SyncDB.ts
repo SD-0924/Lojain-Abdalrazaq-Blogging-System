@@ -7,20 +7,21 @@ import Category from './Category';
 /* create the associations */
 
 // User and Post models
-User.hasMany(Post, {foreignKey: 'userID'});
-Post.belongsTo(User, {foreignKey: 'userID'});
+User.hasMany(Post, { foreignKey: 'userID' });
+Post.belongsTo(User, { foreignKey: 'userID' });
 
 // User and Comment models
-User.hasMany(Comment, {foreignKey: 'userID'});
-Comment.belongsTo(User, {foreignKey: 'userID'});
+User.hasMany(Comment, { foreignKey: 'userID' });
+Comment.belongsTo(User, { foreignKey: 'userID' });
 
 // Post and Comment models
-Post.hasMany(Comment, {foreignKey: 'postID'});
-Comment.belongsTo(Post, {foreignKey: 'postID'});
+Post.hasMany(Comment, { foreignKey: 'postID' });
+Comment.belongsTo(Post, { foreignKey: 'postID' });
 
 // Post and Category models
-Post.belongsToMany(Category, {through: 'PostCategory'});
-Category.belongsToMany(Post, {through: 'PostCategory'});
+Post.belongsToMany(Category, { through: 'PostCategory' });
+Category.belongsToMany(Post, { through: 'PostCategory' });
+
 
 // test the connection to the database
 sequelize.authenticate()
@@ -34,11 +35,11 @@ sequelize.authenticate()
 // sync the tables
 const syncDB = async () => {
     try {
-        await sequelize.sync({ force: true }); 
+        await sequelize.sync({ force: false }); 
         console.log('Database & tables created!');
     } catch (error) {
         console.error('Error syncing tables:', error);
     }
 };
 
-syncDB();  // Call the syncDB function to sync the tables
+//syncDB();  // Call the syncDB function to sync the tables

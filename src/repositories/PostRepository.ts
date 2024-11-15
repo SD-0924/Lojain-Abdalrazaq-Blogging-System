@@ -34,7 +34,6 @@ class PostRepository{
         }
         return null;
     }
-
 }
 
 export default new PostRepository();

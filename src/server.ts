@@ -3,8 +3,8 @@ import { logger } from './middlewares/loggerMiddleware';
 import userRoutes from './routes/userRoutes';
 import postRoutes from './routes/postRoutes';
 import commentRoutes from './routes/commentRoutes';
-/*import sequelize from './config/database';
-import './models/SyncDB';*/
+import sequelize from './config/database';
+import './models/SyncDB';
 
 // express application
 const app = express();
