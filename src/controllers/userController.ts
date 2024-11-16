@@ -4,7 +4,7 @@ import UserService from '../services/userService';
 import * as userValidator from '../validations/userValidation';
 import jwt from 'jsonwebtoken';
 
-// create a new user endpoint
+// create a new user endpoint - SignUp Endpoint - JWT done
 const createUser = async(req: Request, res: Response) => {
     try {
         // validate input data
@@ -23,7 +23,7 @@ const createUser = async(req: Request, res: Response) => {
         }
 
         // call the service to create the user and generate the JWT
-        const { user,token } = await UserService.createUserAndGenerateToken(req.body);
+        const { user , token } = await UserService.createUserAndGenerateToken(req.body);
 
         return res.status(201).json({ success: true, message: "User Created successfully and stored in the Database.", token: token });
 

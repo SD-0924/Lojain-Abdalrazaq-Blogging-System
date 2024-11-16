@@ -41,13 +41,21 @@ class UserService{
         // creating user record using the UserRepository
         const user = await UserRepository.create(userData);
 
-        // ** JWT Token ** //
+        // ** JWT Token using generateJWT function ** //
+        const token =  UserService.generateJWT(user);
+
+        // return the user and the token
+        return { user, token };
+    }
+
+    static generateJWT(user: any) {
+
+        // generating the token and returning it
         const payload = { userID: user.userID, userName: user.userName };
         const secretKey = String(process.env.JWT_SECRET);
         const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
 
-        // return the user and the token
-        return { user, token };
+        return token;
     }
     
 }
