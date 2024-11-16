@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 
-
 const authenticateJWT = (req: any, res: any, next: any) => {
 
     // the secret key to sign and verify tokens

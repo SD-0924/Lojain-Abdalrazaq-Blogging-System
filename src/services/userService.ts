@@ -1,10 +1,7 @@
 import UserRepository from '../repositories/userRepository';
+import jwt from 'jsonwebtoken';
 
 class UserService{
-
-    async createUser(userData: any) {
-        return await UserRepository.create(userData);
-    }
 
     async getAllUsers() {
         return await UserRepository.findAll();
@@ -36,6 +33,21 @@ class UserService{
 
         // no duplicated user found
         return null; 
+    }
+
+    // updated create User fucntion to generate the JWT token
+    async createUserAndGenerateToken(userData: any){
+        
+        // creating user record using the UserRepository
+        const user = await UserRepository.create(userData);
+
+        // ** JWT Token ** //
+        const payload = { userID: user.userID, userName: user.userName };
+        const secretKey = String(process.env.JWT_SECRET);
+        const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
+
+        // return the user and the token
+        return { user, token };
     }
     
 }

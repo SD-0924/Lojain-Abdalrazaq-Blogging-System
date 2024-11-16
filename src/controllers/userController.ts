@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { handleError } from '../utils/errorHandler'; 
 import UserService from '../services/userService';  
 import * as userValidator from '../validations/userValidation';
+import jwt from 'jsonwebtoken';
 
 // create a new user endpoint
 const createUser = async(req: Request, res: Response) => {
@@ -16,36 +17,20 @@ const createUser = async(req: Request, res: Response) => {
 
         // checking if there is a duplicate user - email or username
         const findDuplicates = await UserService.findDuplicateUser(req.body.email, req.body.userName);
+
         if(findDuplicates){
             return handleError(req, res, findDuplicates, 400);
         }
 
-        // call the serivce to make sure that the user does not exist
-        const user = await UserService.createUser(req.body);
-        return res.status(201).json({ success: true, message: "User Created successfully and stored in the Database." });
+        // call the service to create the user and generate the JWT
+        const { user,token } = await UserService.createUserAndGenerateToken(req.body);
+
+        return res.status(201).json({ success: true, message: "User Created successfully and stored in the Database.", token: token });
 
     } catch (err) {
         return handleError(req, res, 'Error in creating user', 500);
     }
 };
-
-// get all users endpoint
-const getAllUsers = async(req: Request, res: Response) =>{
-    try{
-        // i want only to return the user name and email
-        const users = await UserService.getAllUsers();
-
-        // in case we dont have users in the database
-        if(users.length === 0){
-            return handleError(req, res, 'No users found in the Database.', 404);
-        }
-
-        return res.status(200).json({ success: true, data: users });
-
-    }catch(err){
-        return handleError(req, res, 'Error in getting all users.', 500);
-    }
-}
 
 // get a user by id endpoint
 const getUserById = async(req: Request, res: Response) =>{
@@ -121,6 +106,25 @@ const updateUserById = async(req: Request, res: Response) =>{
         return handleError(req, res, 'Error in updating user by id.', 500);
     }
 }
+
+// get all users endpoint
+const getAllUsers = async(req: Request, res: Response) =>{
+    try{
+        // i want only to return the user name and email
+        const users = await UserService.getAllUsers();
+
+        // in case we dont have users in the database
+        if(users.length === 0){
+            return handleError(req, res, 'No users found in the Database.', 404);
+        }
+
+        return res.status(200).json({ success: true, data: users });
+
+    }catch(err){
+        return handleError(req, res, 'Error in getting all users.', 500);
+    }
+}
+
 
 export{ 
     createUser, 

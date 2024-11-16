@@ -1,25 +1,23 @@
 import { Router, Request, Response } from 'express'
 import * as userController from '../controllers/userController';
+import authMiddleware from '../middlewares/authMiddleware';
 
 const router = Router();
 
-router.post('/', async (req: Request, res: Response) => {
+// no need for authMiddleware, since everyone can signup
+router.post('/signup', async (req: Request, res: Response) => {
     await userController.createUser(req, res)
 })
 
-router.get('/', async (req: Request, res: Response) => {
-    await userController.getAllUsers(req, res);
-})
-
-router.get('/:id', async (req: Request, res: Response) => {
+router.get('/profile/:id', async (req: Request, res: Response) => {
     await userController.getUserById(req, res);
 })
 
-router.delete('/:id', async (req: Request, res: Response) => {
+router.delete('/delete/:id', async (req: Request, res: Response) => {
     await userController.deleteUserById(req, res);
 })
 
-router.put('/:id', async (req: Request, res: Response) => {
+router.put('/update/:id', async (req: Request, res: Response) => {
     await userController.updateUserById(req, res);
 })
 
