@@ -58,19 +58,19 @@ const getUserById = async(req: Request, res: Response) =>{
 // delete a user by id endpoint
 const deleteUserById = async(req: Request, res: Response) =>{
     try{
-        // validate the input param
         const { error } = userValidator.validateUserId(req.params);
         if(error){
             return handleError(req, res, error.details[0].message, 422);
         }
-        // convert the id to a number
         const userNumber = parseInt(req.params.id);
         const user = await UserService.deleteUser(userNumber);
-
+        /**
+         * This if statement since in some cases, the user delete his account, but try to reuse the old taken while it is NOT expired yet
+         * race condition (where the token is valid, but the user is no longer in the system) and is why we should handle this error. 
+         */
         if(!user){
             return handleError(req, res, `There is no user with id number: ${userNumber}, the Delete operation failed.`, 404);
         }
-
         return res.status(200).json({ success: true, message: `User with id number: ${userNumber} has been deleted successfully.` });
 
     }catch(err){
