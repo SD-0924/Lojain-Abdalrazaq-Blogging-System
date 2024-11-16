@@ -71,7 +71,8 @@ class UserService{
     static generateJWT(user: any) {
 
         // generating the token and returning it
-        const payload = { userID: user.userID, userName: user.userName, email: user.email };
+        //const payload = { userID: user.userID, userName: user.userName, email: user.email };
+        const payload = {userID: user.userID};
         const secretKey = String(process.env.JWT_SECRET);
         const token = jwt.sign(payload, secretKey, { expiresIn: '1h' });
 

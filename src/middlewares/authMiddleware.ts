@@ -21,9 +21,9 @@ const authenticateJWT = (req: any, res: any, next: any) => {
         // decode the payload of the JWT after verifying the token's signature
         // decode the token and assign the user's information (such as userID name, email) to req.user
         req.user = {
-            userID: decoded?.userID,
-            userName: decoded?.userName,
-            email: decoded?.email
+            userID: decoded?.userID
+          //  userName: decoded?.userName,
+          //  email: decoded?.email
         };
 
         // check id the input id in the param is the same as the decoded one from the token

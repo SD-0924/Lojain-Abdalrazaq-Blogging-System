@@ -33,29 +33,7 @@ const createUser = async(req: Request, res: Response) => {
     }
 };
 
-// get a user by id endpoint
-const getUserById = async(req: Request, res: Response) =>{
-    try{
-        const { error } = userValidator.validateUserId(req.params);
-        if(error){
-            return handleError(req, res, error.details[0].message, 422);
-        }
-
-        const userNumber = parseInt(req.params.id);
-        const user = await UserService.getUserById(userNumber);
-
-        if (!user) {
-            return handleError(req, res, `There is no user with id number: ${userNumber}`, 404);
-        }
-
-        return res.status(200).json({ success: true, data: user });
-
-    }catch(err){
-        return handleError(req, res, 'Error in getting user by id.', 500);
-    }
-}
-
-// delete a user by id endpoint
+// delete a user by id endpoint - Delete Profile - JWT done
 const deleteUserById = async(req: Request, res: Response) =>{
     try{
         const { error } = userValidator.validateUserId(req.params);
@@ -105,6 +83,28 @@ const updateUserById = async(req: Request, res: Response) =>{
 
     }catch(err){
         return handleError(req, res, 'Error in updating user by id.', 500);
+    }
+}
+
+// get a user by id endpoint
+const getUserById = async(req: Request, res: Response) =>{
+    try{
+        const { error } = userValidator.validateUserId(req.params);
+        if(error){
+            return handleError(req, res, error.details[0].message, 422);
+        }
+
+        const userNumber = parseInt(req.params.id);
+        const user = await UserService.getUserById(userNumber);
+
+        if (!user) {
+            return handleError(req, res, `There is no user with id number: ${userNumber}`, 404);
+        }
+
+        return res.status(200).json({ success: true, data: user });
+
+    }catch(err){
+        return handleError(req, res, 'Error in getting user by id.', 500);
     }
 }
 
