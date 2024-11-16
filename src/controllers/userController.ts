@@ -59,11 +59,11 @@ const loginUser = async(req: Request, res: Response) =>{
 // delete a user by id endpoint - Delete Profile - JWT done
 const deleteUserById = async(req: Request, res: Response) =>{
     try{
-        const { error } = userValidator.validateUserId(req.params);
+        const { error } = userValidator.validateUserId(req.body.userID);
         if(error){
             return handleError(req, res, error.details[0].message, 422);
         }
-        const userNumber = parseInt(req.params.id);
+        const userNumber = parseInt(req.body.userID);
         const user = await UserService.deleteUser(userNumber);
         /**
          * This if statement since in some cases, the user delete his account, but try to reuse the old taken while it is NOT expired yet
@@ -82,9 +82,9 @@ const deleteUserById = async(req: Request, res: Response) =>{
 // update user by id endpoint - Update Profile - JWT done
 const updateUserById = async(req: Request, res: Response) =>{
     try{
-        // validate the input param
-        const { error: idError } = userValidator.validateUserId(req.params);
-        const { error: updateError } = userValidator.validateUpdateUser(req.body);
+        const { error: idError } = userValidator.validateUserId(req.body.userID);
+        const { userID, ...updateData } = req.body;  // exculding the userID from the body to not be updated
+        const { error: updateError } = userValidator.validateUpdateUser(updateData);
 
         if(idError){
             return handleError(req, res, idError.details[0].message, 422);
@@ -94,10 +94,8 @@ const updateUserById = async(req: Request, res: Response) =>{
             return handleError(req, res, updateError.details[0].message, 422);
         }
 
-        // parsing the id to a number
-        const userNumber = parseInt(req.params.id);
-        // call the service to update the user
-        const updatedUser = await UserService.updateUser(userNumber, req.body);
+        const userNumber = parseInt(req.body.userID); 
+        const updatedUser = await UserService.updateUser(userNumber, updateData);
 
         if(!updatedUser){
             return handleError(req, res, `There is no user with id number: ${userNumber}, the Update operation failed.`, 404);
@@ -112,12 +110,12 @@ const updateUserById = async(req: Request, res: Response) =>{
 // get a user by id endpoint - JWT done
 const getUserById = async(req: Request, res: Response) =>{
     try{
-        const { error } = userValidator.validateUserId(req.params);
+        const { error } = userValidator.validateUserId(req.body.userID);
         if(error){
             return handleError(req, res, error.details[0].message, 422);
         }
 
-        const userNumber = parseInt(req.params.id);
+        const userNumber = parseInt(req.body.userID);
         const user = await UserService.getUserById(userNumber);
 
         if (!user) {

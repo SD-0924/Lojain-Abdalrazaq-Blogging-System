@@ -9,7 +9,7 @@ const userValidationSchema = Joi.object({
 
 // defining a schema for the `id` parameter
 const userIdSchema = Joi.object({
-    id: Joi.number().integer().positive().required(),
+    userID: Joi.number().integer().positive().required(),
 });
 
 const userUpdateSchema = Joi.object({
