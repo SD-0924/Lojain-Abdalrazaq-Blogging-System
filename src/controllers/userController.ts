@@ -3,6 +3,7 @@ import { handleError } from '../utils/errorHandler';
 import UserService from '../services/userService';  
 import * as userValidator from '../validations/userValidation';
 import jwt from 'jsonwebtoken';
+import userService from '../services/userService';
 
 // create a new user endpoint - SignUp Endpoint - JWT done
 const createUser = async(req: Request, res: Response) => {
@@ -125,11 +126,34 @@ const getAllUsers = async(req: Request, res: Response) =>{
     }
 }
 
+const loginUser = async(req: Request, res: Response) =>{
+    try{
+        // Validate input data
+        const { error } = userValidator.validateLogin(req.body);
+        if (error) {
+            return handleError(req, res, error.details[0].message, 422);
+        }
+
+        const { email, password } = req.body;
+
+        // Finding the User By email
+        const token = await userService.loginUserAndGenerateToken(email, password);
+        if (!token) {
+            return handleError(req, res, `User with ${email} Not Found or Incorrect Password`, 401);
+        }
+        
+        // Sending the Token with the Response
+        return res.status(200).json({success: true, message: "Login successful", token: token});
+    }catch(err){
+        return handleError(req, res, "Error logging in", 500); 
+    }
+}
 
 export{ 
     createUser, 
     getAllUsers,
     getUserById,
     deleteUserById,
-    updateUserById
+    updateUserById,
+    loginUser
 };

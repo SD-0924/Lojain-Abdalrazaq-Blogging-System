@@ -18,6 +18,11 @@ const userUpdateSchema = Joi.object({
     password: Joi.string().min(6).optional(),
 }).or('userName', 'email', 'password');
 
+const userLoginSchema = Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+});
+
 // function checks if the input matches the schema for creating a user record
 const validateCreateUser = (userData: any) => {
     return userValidationSchema.validate(userData);
@@ -33,8 +38,14 @@ const validateUpdateUser = (userData: any) => {
     return userUpdateSchema.validate(userData);
 }
 
+// to validate the user input when logging
+const validateLogin = (userData: any) => {
+    return userLoginSchema.validate(userData);
+}
+
 export{ 
     validateCreateUser,
     validateUserId,
-    validateUpdateUser
+    validateUpdateUser,
+    validateLogin
 };

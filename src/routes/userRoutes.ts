@@ -9,6 +9,11 @@ router.post('/signup', async (req: Request, res: Response) => {
     await userController.createUser(req, res)
 })
 
+// Login Endpoint
+router.post('/login', async (req: Request, res: Response) => {
+    await userController.loginUser(req, res)
+})
+
 router.get('/profile/:id', async (req: Request, res: Response) => {
     await userController.getUserById(req, res);
 })

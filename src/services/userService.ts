@@ -1,5 +1,6 @@
 import UserRepository from '../repositories/userRepository';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 class UserService{
 
@@ -46,6 +47,25 @@ class UserService{
 
         // return the user and the token
         return { user, token };
+    }
+
+    async loginUserAndGenerateToken(email: string, password: string){
+
+        // verify the email address
+        const user = await UserRepository.findByEmail(email);
+        if(!user){
+            return null;
+        }
+
+        // verify the password
+        const isPasswordCorrect = await bcrypt.compare(password, user.password);
+        if (!isPasswordCorrect) {
+            return null;
+        }
+
+        // if cirrect we return the token
+        const token = UserService.generateJWT(user);
+        return token;
     }
 
     static generateJWT(user: any) {
