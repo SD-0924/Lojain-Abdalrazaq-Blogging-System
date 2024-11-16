@@ -15,17 +15,17 @@ router.post('/login', async (req: Request, res: Response) => {
 })
 
 // Delete Profile Endpoint, we have to use the authMiddleware
-router.delete('/delete/:id', authMiddleware, async (req: Request, res: Response) => {
+router.delete('/delete', authMiddleware, async (req: Request, res: Response) => {
     await userController.deleteUserById(req, res);
 })
 
 // Edit Porfile information endpoint, we also have to use the authMiddleware
-router.put('/update/:id', authMiddleware, async (req: Request, res: Response) => {
+router.put('/update', authMiddleware, async (req: Request, res: Response) => {
     await userController.updateUserById(req, res);
 })
 
 // Read Profile info
-router.get('/profile/:id', authMiddleware, async (req: Request, res: Response) => {
+router.get('/profile', authMiddleware, async (req: Request, res: Response) => {
     await userController.getUserById(req, res);
 })
 
