@@ -82,20 +82,13 @@ const deleteUserById = async(req: Request, res: Response) =>{
 // update user by id endpoint - Update Profile - JWT done
 const updateUserById = async(req: Request, res: Response) =>{
     try{
-        const { error: idError } = userValidator.validateUserId(req.body.userID);
-        const { userID, ...updateData } = req.body;  // exculding the userID from the body to not be updated
-        const { error: updateError } = userValidator.validateUpdateUser(updateData);
-
-        if(idError){
-            return handleError(req, res, idError.details[0].message, 422);
-        }
-
+        const { error: updateError } = userValidator.validateUpdateUser(req.body);
         if(updateError){
             return handleError(req, res, updateError.details[0].message, 422);
         }
 
         const userNumber = parseInt(req.body.userID); 
-        const updatedUser = await UserService.updateUser(userNumber, updateData);
+        const updatedUser = await UserService.updateUser(userNumber, req.body);
 
         if(!updatedUser){
             return handleError(req, res, `There is no user with id number: ${userNumber}, the Update operation failed.`, 404);

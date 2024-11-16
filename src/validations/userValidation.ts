@@ -13,6 +13,7 @@ const userIdSchema = Joi.object({
 });
 
 const userUpdateSchema = Joi.object({
+    userID: Joi.number().integer().positive().required(),
     userName: Joi.string().min(3).max(50).optional(),
     email: Joi.string().email().optional(),
     password: Joi.string().min(6).optional(),

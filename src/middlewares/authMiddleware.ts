@@ -27,11 +27,12 @@ const authenticateJWT = (req: any, res: any, next: any) => {
         };
 
         // check id the input id in the param is the same as the decoded one from the token
-        if (req.body.userID && req.body.userID !== String(req.user.userID)) {
+        if (String(req.body.userID) && String(req.body.userID) !== String(req.user.userID)) {
             return res.status(403).json({ message: 'You are not authorized to access this resource.' });
         }
 
         next();
+
     });
     
 };
