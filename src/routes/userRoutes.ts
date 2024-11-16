@@ -24,7 +24,7 @@ router.put('/update/:id', authMiddleware, async (req: Request, res: Response) =>
     await userController.updateUserById(req, res);
 })
 
-router.get('/profile/:id', async (req: Request, res: Response) => {
+router.get('/profile/:id', authMiddleware, async (req: Request, res: Response) => {
     await userController.getUserById(req, res);
 })
 

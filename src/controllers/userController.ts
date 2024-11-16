@@ -31,7 +31,30 @@ const createUser = async(req: Request, res: Response) => {
     } catch (err) {
         return handleError(req, res, 'Error in creating user', 500);
     }
-};
+}
+
+const loginUser = async(req: Request, res: Response) =>{
+    try{
+        // Validate input data
+        const { error } = userValidator.validateLogin(req.body);
+        if (error) {
+            return handleError(req, res, error.details[0].message, 422);
+        }
+
+        const { email, password } = req.body;
+
+        // Finding the User By email
+        const token = await userService.loginUserAndGenerateToken(email, password);
+        if (!token) {
+            return handleError(req, res, `User with ${email} Not Found or Incorrect Password`, 401);
+        }
+        
+        // Sending the Token with the Response
+        return res.status(200).json({success: true, message: "Login successful", token: token});
+    }catch(err){
+        return handleError(req, res, "Error logging in", 500); 
+    }
+}
 
 // delete a user by id endpoint - Delete Profile - JWT done
 const deleteUserById = async(req: Request, res: Response) =>{
@@ -56,7 +79,7 @@ const deleteUserById = async(req: Request, res: Response) =>{
     }
 }
 
-// update user by id endpoint
+// update user by id endpoint - Update Profile - JWT done
 const updateUserById = async(req: Request, res: Response) =>{
     try{
         // validate the input param
@@ -108,50 +131,8 @@ const getUserById = async(req: Request, res: Response) =>{
     }
 }
 
-// get all users endpoint
-const getAllUsers = async(req: Request, res: Response) =>{
-    try{
-        // i want only to return the user name and email
-        const users = await UserService.getAllUsers();
-
-        // in case we dont have users in the database
-        if(users.length === 0){
-            return handleError(req, res, 'No users found in the Database.', 404);
-        }
-
-        return res.status(200).json({ success: true, data: users });
-
-    }catch(err){
-        return handleError(req, res, 'Error in getting all users.', 500);
-    }
-}
-
-const loginUser = async(req: Request, res: Response) =>{
-    try{
-        // Validate input data
-        const { error } = userValidator.validateLogin(req.body);
-        if (error) {
-            return handleError(req, res, error.details[0].message, 422);
-        }
-
-        const { email, password } = req.body;
-
-        // Finding the User By email
-        const token = await userService.loginUserAndGenerateToken(email, password);
-        if (!token) {
-            return handleError(req, res, `User with ${email} Not Found or Incorrect Password`, 401);
-        }
-        
-        // Sending the Token with the Response
-        return res.status(200).json({success: true, message: "Login successful", token: token});
-    }catch(err){
-        return handleError(req, res, "Error logging in", 500); 
-    }
-}
-
 export{ 
     createUser, 
-    getAllUsers,
     getUserById,
     deleteUserById,
     updateUserById,
