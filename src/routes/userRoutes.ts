@@ -14,12 +14,13 @@ router.post('/login', async (req: Request, res: Response) => {
     await userController.loginUser(req, res)
 })
 
-router.get('/profile/:id', async (req: Request, res: Response) => {
-    await userController.getUserById(req, res);
+// Delete Profile Endpoint, we have to use the authMiddleware
+router.delete('/delete/:id', authMiddleware, async (req: Request, res: Response) => {
+    await userController.deleteUserById(req, res);
 })
 
-router.delete('/delete/:id', async (req: Request, res: Response) => {
-    await userController.deleteUserById(req, res);
+router.get('/profile/:id', async (req: Request, res: Response) => {
+    await userController.getUserById(req, res);
 })
 
 router.put('/update/:id', async (req: Request, res: Response) => {
