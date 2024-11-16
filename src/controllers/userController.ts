@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { handleError } from '../utils/errorHandler'; 
 import UserService from '../services/userService';  
 import * as userValidator from '../validations/userValidation';
-import jwt from 'jsonwebtoken';
 import userService from '../services/userService';
 
 // create a new user endpoint - SignUp Endpoint - JWT done
@@ -33,6 +32,7 @@ const createUser = async(req: Request, res: Response) => {
     }
 }
 
+// Login User - JWT done
 const loginUser = async(req: Request, res: Response) =>{
     try{
         // Validate input data
@@ -109,7 +109,7 @@ const updateUserById = async(req: Request, res: Response) =>{
     }
 }
 
-// get a user by id endpoint
+// get a user by id endpoint - JWT done
 const getUserById = async(req: Request, res: Response) =>{
     try{
         const { error } = userValidator.validateUserId(req.params);
