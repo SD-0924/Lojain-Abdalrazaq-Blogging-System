@@ -52,4 +52,4 @@ const syncDB = async () => {
     }
 };
 
-//syncDB();  // Call the syncDB function to sync the tables
+syncDB();  // Call the syncDB function to sync the tables
