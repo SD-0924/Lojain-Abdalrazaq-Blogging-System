@@ -17,6 +17,11 @@ const postUpdateValidationSchema = Joi.object({
     userID: Joi.number().integer().positive().optional(),
 }).or('title', 'content', 'userID');
 
+const pstDeleteValidationSchema = Joi.object({
+    id: Joi.number().integer().positive().required(),
+    userID: Joi.number().integer().positive().required(),
+});
+
 // * Functions Implementation * //
 const validateCreatePost = (postData: any) => {
     return postValidationSchema.validate(postData);
@@ -30,9 +35,14 @@ const validateUpdatePost = (postData: any) => {
     return postUpdateValidationSchema.validate(postData);
 };
 
+const validateDeletePost = (postData: any) =>{
+    return pstDeleteValidationSchema.validate(postData);
+};
+
 // * Exporting the functions * //
 export{
     validateCreatePost,
     validatePostID,
-    validateUpdatePost
+    validateUpdatePost,
+    validateDeletePost
 }

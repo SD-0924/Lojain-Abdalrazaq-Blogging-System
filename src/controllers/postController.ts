@@ -107,22 +107,25 @@ const deletePost = async(req: Request, res: Response) =>{
     try{
 
         // validate the input data
-        const { error } = postValidator.validatePostID(req.params);
+        const { error } = postValidator.validateDeletePost(req.body);
         if(error){
             return handleError(req, res, error.details[0].message, 422);
         }
 
-        // parsing the post id to a number
-        const postId = Number(req.params.id);
-
-        // call the service to delete the post
-        const post = await postService.deletePost(postId);
-
-        if(!post){
-            return handleError(req, res, 'Post not found.', 404);
+        const { id , userID } = req.body;
+        const post = await postService.getPostById(id); // checking if the post exists
+        
+        if (!post) {
+            return handleError(req, res, `Post with ID ${id} not found.`, 404);
         }
 
-        return res.status(200).json({ success: true, message: `Post with id number: ${postId} has been deleted successfully.` });
+        // example: the userID is same as the user in the token, however, in the Database of Posts, the user is differnt, so we canrt delete it
+        if (post.userID !== userID) {
+            return handleError(req, res, 'You are not authorized to delete this post.', 403);
+        }
+        
+        await postService.deletePost(id);
+        return res.status(200).json({ success: true, message: `Post with id number: ${id} has been deleted successfully.` });
 
     }catch(err){
         return handleError(req, res, 'Error in deleting post.', 500);
