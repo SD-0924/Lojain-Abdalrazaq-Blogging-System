@@ -17,7 +17,7 @@ router.get('/getpost/:id', async (req: Request, res: Response) => {
     await postController.getPostById(req, res)
 })
 
-router.delete('/:id',authMiddleware, async (req: Request, res: Response) => {
+router.delete('/delete',authMiddleware, async (req: Request, res: Response) => {
     await postController.deletePost(req, res)
 })
 

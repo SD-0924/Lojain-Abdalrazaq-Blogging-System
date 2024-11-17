@@ -87,16 +87,22 @@ const updatePost = async(req: Request, res: Response) =>{
 
         // parsing the post id to a number
         const postId = Number(req.params.id);
+        const { userID, ...updateData } = req.body;
 
+        const post = await postService.getPostById(postId);
+        if (!post) {
+            return handleError(req, res, `Post with ID ${postId} not found.`, 404);
+        }
+        if (post.userID !== userID) {
+            return handleError(req, res, 'You are not authorized to update this post.', 403);
+        }
         // call the service to update the post
-        const post = await postService.updatePost(postId, req.body);
-
-        if(!post){
-            return handleError(req, res, 'Post or User not found.', 404);
+        const updatedPost = await postService.updatePost(postId, updateData);
+        if (!updatedPost) {
+            return handleError(req, res, 'Failed to update post.', 500);
         }
 
-        return res.status(200).json({ success: true, data: post });
-
+        return res.status(200).json({ success: true, data: updatedPost });
     }catch(err){
         return handleError(req, res, 'Error in updating post.', 500);
     }
@@ -123,7 +129,7 @@ const deletePost = async(req: Request, res: Response) =>{
         if (post.userID !== userID) {
             return handleError(req, res, 'You are not authorized to delete this post.', 403);
         }
-        
+
         await postService.deletePost(id);
         return res.status(200).json({ success: true, message: `Post with id number: ${id} has been deleted successfully.` });
 

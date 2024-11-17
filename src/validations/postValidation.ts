@@ -14,8 +14,8 @@ const postID = Joi.object({
 const postUpdateValidationSchema = Joi.object({
     title: Joi.string().min(3).max(50).optional(),
     content: Joi.string().min(6).optional(),
-    userID: Joi.number().integer().positive().optional(),
-}).or('title', 'content', 'userID');
+    userID: Joi.number().integer().positive().required(),
+}).or('title', 'content');
 
 const pstDeleteValidationSchema = Joi.object({
     id: Joi.number().integer().positive().required(),

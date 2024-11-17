@@ -80,14 +80,6 @@ class PostService{
 
     // update post
     async updatePost(postId: number, updateData: any){
-        // i want to check if the user that i want to update the post with his id exists or not
-        if(updateData.userID){
-            const userExists = await UserService.getUserById(updateData.userID);
-            if(!userExists){
-                return null;
-            }
-        }
-        // if the user exists, i will update the post with the new data if the post id exists
         return await PostRepository.update(postId, updateData);
     }
 
